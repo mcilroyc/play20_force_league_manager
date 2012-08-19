@@ -31,8 +31,8 @@ public class Application extends Controller {
 	public static Result loginToSFDC() {
 		String url = Auth.startOAuthWebServerFlow(new AuthorizationRequest()
 				.apiConfig(new ApiConfig()
-					.setClientId("3MVG9y6x0357Hlec8S2SO0GslEED6ht6ARorUCD0oJvWAWgBNQThaNgwXJ3esF4iaa3QmY3Zw_LVgaOqEU86c")
-					.setRedirectURI("https://adiabats.herokuapp.com/oauth"))
+					.setClientId(System.getenv("CLIENT_ID"))
+					.setRedirectURI("https://" + System.getenv("DOMAIN") + "/oauth"))
 				.state("mystate"));
 		return redirect(url);
 	}
@@ -40,9 +40,9 @@ public class Application extends Controller {
 	public static Result handleOAuth(String token) {
 		Logger.warn("using code: " + token);
 		ApiConfig config = new ApiConfig()
-					.setClientId("3MVG9y6x0357Hlec8S2SO0GslEED6ht6ARorUCD0oJvWAWgBNQThaNgwXJ3esF4iaa3QmY3Zw_LVgaOqEU86c")
-					.setClientSecret("3360843589409396938")
-					.setRedirectURI("https://adiabats.herokuapp.com/oauth");
+					.setClientId(System.getenv("CLIENT_ID"))
+					.setRedirectURI("https://" + System.getenv("DOMAIN") + "/oauth")
+					.setClientSecret(System.getenv("CLIENT_SECRET"));
 		ApiSession session = Auth.completeOAuthWebServerFlow(new AuthorizationResponse()
 				.apiConfig(config)
 				.code(token));
