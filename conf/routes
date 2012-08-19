@@ -4,6 +4,7 @@
 
 # Home page
 GET     /                           controllers.Application.index()
+GET     /jedisTest                  controllers.Application.jedisTest()
 GET     /loginToSFDC                controllers.Application.loginToSFDC()
 GET     /oauth                      controllers.Application.handleOAuth(code: String)
 GET     /manager/home               controllers.Application.managerHome()

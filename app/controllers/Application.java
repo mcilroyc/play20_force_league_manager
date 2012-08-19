@@ -17,6 +17,12 @@ public class Application extends Controller {
 					queryFDC()));
 	}
 
+	public static Result jedisTest() {
+		Jedis jedis = play.Play.application().plugin(RedisPlugin.class).jedisPool().getResource();
+		jedis.incr("foo");
+		return ok(index.render("foo:" + jedis.get("foo")));
+	}
+
 	public static Result managerHome() {
 		String token = ((ApiSession)play.cache.Cache.get(session("SFDCUserId"))).getAccessToken();
 		return ok(index.render("welcome to the adiabats manager with auth token:" + token ));
