@@ -24,7 +24,7 @@ public class Application extends Controller {
 	}
 
 	public static Result managerHome() {
-		String token = ((ApiSession)play.cache.Cache.get(session("SFDCUserId"))).getAccessToken();
+		String token = ((ApiSession)play.cache.Cache.get(sessionKey(session("SFDCUserId")))).getAccessToken();
 		return ok(index.render("welcome to the adiabats manager with auth token:" + token ));
 	}
 
