@@ -36,7 +36,7 @@ public class Application extends Controller {
 		ApiConfig config = new ApiConfig()
 					.setClientId("3MVG9y6x0357Hlec8S2SO0GslEED6ht6ARorUCD0oJvWAWgBNQThaNgwXJ3esF4iaa3QmY3Zw_LVgaOqEU86c")
 					.setClientSecret("3360843589409396938")
-					.setRedirectURI("https://myapp.mydomain.com/oauth");
+					.setRedirectURI("https://adiabats.herokuapp.com/oauth");
 		ApiSession session = Auth.completeOAuthWebServerFlow(new AuthorizationResponse()
 				.apiConfig(config)
 				.code(token));
