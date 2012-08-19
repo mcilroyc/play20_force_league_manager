@@ -32,6 +32,7 @@ public class Application extends Controller {
 	}
 
 	public static Result handleOAuth(String token) {
+		Logger.warn("using code: " + token);
 		ApiConfig config = new ApiConfig()
 					.setClientId("3MVG9y6x0357Hlec8S2SO0GslEED6ht6ARorUCD0oJvWAWgBNQThaNgwXJ3esF4iaa3QmY3Zw_LVgaOqEU86c")
 					.setClientSecret("3360843589409396938")
@@ -39,7 +40,7 @@ public class Application extends Controller {
 		ApiSession session = Auth.completeOAuthWebServerFlow(new AuthorizationResponse()
 				.apiConfig(config)
 				.code(token));
-		
+		Logger.warn("about to create ForceApi");	
 		ForceApi api = new ForceApi(config,session);
 		String userId = api.getIdentity().getUserId();
 		play.cache.Cache.set(sessionKey(userId), session);		
