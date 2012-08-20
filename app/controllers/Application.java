@@ -2,19 +2,20 @@ package controllers;
 
 import play.*;
 import play.mvc.*;
+import models.*;
 
 import views.html.*;
 import com.force.api.*;
 import java.util.Map;
 
+import static play.libs.Json.toJson;
 import com.typesafe.plugin.RedisPlugin;
 import redis.clients.jedis.*;
 
 public class Application extends Controller {
 
 	public static Result index() {
-		return ok(index.render("welcome to the adiabats manager" + 
-					queryFDC()));
+		return ok(index.render("welcome to the adiabats manager" ));
 	}
 
 	public static Result jedisTest() {
@@ -24,8 +25,30 @@ public class Application extends Controller {
 	}
 
 	public static Result managerHome() {
-		String token = ((ApiSession)play.cache.Cache.get(sessionKey(session("SFDCUserId")))).getAccessToken();
-		return ok(index.render("welcome to the adiabats manager with auth token:" + token ));
+		/*
+		//FIXME temporarily disabled the actual session/auth		
+		ApiSession session = (ApiSession)play.cache.Cache.get(sessionKey(session("SFDCUserId")));
+		if (session == null) return badRequest("not logged in");	
+		String token = session.getAccessToken();
+		ForceApi api = new ForceApi(session);
+		*/
+		ApiConfig config = new ApiConfig()
+				.setUsername(System.getenv("PUBLIC_SFDC_USERNAME"))
+				.setPassword(System.getenv("PUBLIC_SFDC_PASSWORD"))
+				.setClientId(System.getenv("CLIENT_ID"))
+				.setClientSecret(System.getenv("CLIENT_SECRET")) ;
+		ApiSession session = Auth.authenticate(config);
+		ForceApi api = new ForceApi(config, session);
+		QueryResult<Player> results = 	
+			api.query("select id, name, Nights_Available__c, Positions__c from Player__c where Willing_to_Substitute__c = true", Player.class);
+		String response = "welcome to the adiabats manager with this many Players: " + results.getTotalSize();
+		response += "\n first name" + results.getRecords().get(0).getName();
+	        PlayerSearcher ps = new PlayerSearcher(results.getRecords());	
+		return ok(index.render(response ));
+	}
+
+	public static Result managerTest() {
+		return ok(toJson(PlayerSearcher.getPitchersOnWednesday()));
 	}
 
 	public static Result loginToSFDC() {
@@ -58,6 +81,7 @@ public class Application extends Controller {
 		return "user:"+userId+":session";
 	}
 
+/*
 	private static String queryFDC() {
 		String s = "";
 		QueryResult<Map> result = connectToFDC().query("select id, name from Team__c");
@@ -79,5 +103,6 @@ public class Application extends Controller {
 				);
 		return api;
 	}
+*/
 
 }
