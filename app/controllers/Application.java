@@ -15,7 +15,7 @@ import redis.clients.jedis.*;
 public class Application extends Controller {
 
 	public static Result index() {
-		return ok(index.render("welcome to the adiabats manager" ));
+		return ok(index.render("welcome to the DF12 manager" ));
 	}
 
 	public static Result jedisTest() {
