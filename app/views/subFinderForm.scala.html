@@ -1,0 +1,8 @@
+@(searchForm: Form[Player])
+@main("Search-a-Sub") {
+	@helper.form(action = routes.TeamManagerController.getSubs()) {
+		@helper.inputText(searchForm("positions"))
+		@helper.inputText(searchForm("nightsAvailable"))
+		<input type="submit" value="Create">
+	}
+}

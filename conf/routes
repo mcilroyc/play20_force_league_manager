@@ -3,14 +3,17 @@
 # ~~~~
 
 # Home page
-GET     /                           controllers.Application.index()
-GET     /jedisTest                  controllers.Application.jedisTest()
-GET     /loginToSFDC                controllers.Application.loginToSFDC()
-GET     /oauth                      controllers.Application.handleOAuth(code: String)
-GET     /manager/home               controllers.Application.managerHome()
-GET     /manager/test               controllers.Application.managerTest()
+GET     /                           controllers.Standings.index()
+GET     /loginToSFDC                controllers.AuthController.loginToSFDC()
+GET     /oauth                      controllers.AuthController.handleOAuth(code: String)
+
+# need a "manager search" route TODO research form submission
+GET     /manager/home               controllers.TeamManagerController.index()
+GET     /manager/test               controllers.TeamManagerController.managerTest()
+GET     /manager/subs               controllers.TeamManagerController.getSubs()
 
 GET     /standings                  controllers.Standings.index()
+GET     /standings/all              controllers.Standings.getAll()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
