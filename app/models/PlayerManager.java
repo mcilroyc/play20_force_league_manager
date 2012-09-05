@@ -37,11 +37,15 @@ public class PlayerManager {
 			Jedis jedis = pool.getResource();
 			try {
 				HashSet<String> keysToIntersect = new HashSet<String>();
-				for(String s : positions){
-					keysToIntersect.add(RedisHelper.buildSetMembersKey("position",s));
+				if (positions!=null){
+					for(String s : positions){
+						keysToIntersect.add(RedisHelper.buildSetMembersKey("position",s));
+					}
 				}
-				for(String s : nightsAvailable){
-					keysToIntersect.add(RedisHelper.buildSetMembersKey("nightAvailable",s));
+				if (nightsAvailable != null) {
+					for(String s : nightsAvailable){
+						keysToIntersect.add(RedisHelper.buildSetMembersKey("nightAvailable",s));
+					}
 				}
 				//call Jeds SINTER
 				Logger.debug("searching with keys: " + keysToIntersect);

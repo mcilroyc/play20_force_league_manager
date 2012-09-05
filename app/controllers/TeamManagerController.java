@@ -34,8 +34,14 @@ public class TeamManagerController extends Controller {
 						);
 			} else {
 				Player searchPlayer = filledForm.get();
-				String[] positions = {searchPlayer.getPositions()};
-				String[] nightsAvailable = {searchPlayer.getNightsAvailable()};
+				String[] positions = null;
+				String[] nightsAvailable = null;
+				if (searchPlayer.getPositions() != null && !searchPlayer.getPositions().isEmpty()){
+					positions = new String[]{searchPlayer.getPositions()};
+				}
+				if (searchPlayer.getNightsAvailable() != null && !searchPlayer.getNightsAvailable().isEmpty()){
+					nightsAvailable = new String[]{searchPlayer.getNightsAvailable()};
+				}
 				players = new PlayerManager((ForceApi)ctx().args.get("api"))
 					.findPlayers(positions, nightsAvailable);
 				//render the response

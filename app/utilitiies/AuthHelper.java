@@ -20,6 +20,7 @@ public class AuthHelper {
 			}
 			else {
 				Logger.info("using session with auth token: " + session.getAccessToken());
+				Logger.info("using session with getApiEndpoint: " + session.getApiEndpoint());
 				return new ForceApi(session);
 			}
 		}
@@ -31,12 +32,12 @@ public class AuthHelper {
 
 	public static ForceApi getPrivateForceApiFromToken(String token) {
 		ApiConfig config = new ApiConfig()
-			.setUsername(System.getenv("PUBLIC_SFDC_USERNAME"))
-			.setPassword(System.getenv("PUBLIC_SFDC_PASSWORD"))
+			.setRedirectURI("https://" + System.getenv("DOMAIN") + "/oauth")
 			.setClientId(System.getenv("CLIENT_ID"))
 			.setClientSecret(System.getenv("CLIENT_SECRET")) ;
 		ApiSession session = new ApiSession()
-			.setAccessToken(token);
+			.setAccessToken(token)
+			.setApiEndpoint("https://na9.salesforce.com");
 		try {
 			return new ForceApi(config,session);
 		}

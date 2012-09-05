@@ -15,7 +15,7 @@ public class Standings extends Controller {
 
 	//Standing home page (returns template/html)
 	public static Result index() {
-		return ok(index.render("Standings Home Page"));
+		return ok(standings.render("Standings Home Page"));
 	}
 	
 	//getAll (returns JSON)

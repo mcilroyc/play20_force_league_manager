@@ -1,0 +1,18 @@
+@(message: String)
+
+@main("Current Standings") {
+    
+	<script type="text/javascript">
+		$.ajax({
+			type: "GET",
+			url: "/standings/all",
+			contentType: "text/json",
+			success: function(data){
+					$(data).each(function(i,d){
+						$("#standingsList").append($("<li>" + d + "</li>"));
+					})
+				}
+		})
+	</script> 
+	<ul id="standingsList"></ul>
+}
