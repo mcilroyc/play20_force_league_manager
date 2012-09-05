@@ -28,7 +28,7 @@ public class StandingsManager {
 			standingsJson = fetchStandingsFromSFDC();
 			if (standingsJson != null){
 				Logger.debug("standings fetched, adding to cache");
-				play.cache.Cache.set(STANDINGS_KEY,standingsJson,120);
+				play.cache.Cache.set(STANDINGS_KEY,standingsJson,30);
 				return standingsJson;
 			}
 			else {

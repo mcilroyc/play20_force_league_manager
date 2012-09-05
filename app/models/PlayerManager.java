@@ -129,7 +129,7 @@ public class PlayerManager {
 			for(Player p : players) {
 				allPlayersMap.put(p.id,p);
 			}
-			play.cache.Cache.set(ALL_PLAYERS_CACHE_KEY,allPlayersMap);
+			play.cache.Cache.set(ALL_PLAYERS_CACHE_KEY,allPlayersMap, 30);
 			//also index the players in redis for searching
 			indexPlayers(players);
 			return allPlayersMap;
