@@ -9,7 +9,7 @@ object ApplicationBuild extends Build {
 
     val appDependencies = Seq(
       "redis.clients" % "jedis" % "2.0.0",
-      "com.force.api" % "force-rest-api" % "0.0.19",
+      "com.force.api" % "force-rest-api" % "0.0.19"
       //"com.typesafe" %% "play-plugins-redis" % "2.0.2",
       //"org.sedis" %% "sedis" % "1.0.1"
     )
