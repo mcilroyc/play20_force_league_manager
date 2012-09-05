@@ -9,10 +9,10 @@
 			contentType: "text/json",
 			success: function(data){
 					$(data).each(function(i,d){
-						$("#standingsList").append($("<li>" + d + "</li>"));
+						$("#standingsList").append($("<li>" + d.teamName + " (" + d.gamesWon + "-" + d.gamesLost + ")</li>"));
 					})
 				}
 		})
 	</script> 
-	<ul id="standingsList"></ul>
+	<ol id="standingsList"></ol>
 }

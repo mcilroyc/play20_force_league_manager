@@ -1,10 +1,10 @@
 @(players: List[Player])
 
 @main("Player Search Results") {
-	<h1>cory test: hese are the players</h1>
+	<h1>Substitute Matches:</h1>
 	<ul> 
 		@for(player <- players) {
-		  <li>@player.getName()</li>
+		  <li>@player.getName() (@player.getPositions())</li>
 		} 
 	</ul> 
 }
