@@ -15,8 +15,30 @@ public class AuthHelper {
 		ApiSession session;
 		try {
 			session = (ApiSession)play.cache.Cache.get(sessionKey(sfdcUserId));
-			if (session == null) return null;
-			return new ForceApi(session);
+			if (session == null) {
+				return null;
+			}
+			else {
+				Logger.debug("using session with auth token: " + session.getAccessToken());
+				return new ForceApi(session);
+			}
+		}
+		catch (Exception e) {
+			return null;
+			//TODO Bad
+		}
+	}
+
+	public static ForceApi getPrivateForceApiFromToken(String token) {
+		ApiConfig config = new ApiConfig()
+			.setUsername(System.getenv("PUBLIC_SFDC_USERNAME"))
+			.setPassword(System.getenv("PUBLIC_SFDC_PASSWORD"))
+			.setClientId(System.getenv("CLIENT_ID"))
+			.setClientSecret(System.getenv("CLIENT_SECRET")) ;
+		ApiSession session = new ApiSession()
+			.setAccessToken(token);
+		try {
+			return new ForceApi(config,session);
 		}
 		catch (Exception e) {
 			return null;

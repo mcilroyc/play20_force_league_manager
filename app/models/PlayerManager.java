@@ -35,46 +35,56 @@ public class PlayerManager {
 		}
 		else {
 			Jedis jedis = play.Play.application().plugin(RedisPlugin.class).jedisPool().getResource();
-			HashSet<String> keysToIntersect = new HashSet<String>();
-			for(String s : positions){
-				keysToIntersect.add(RedisHelper.buildSetMembersKey("position",s));
+			try {
+				HashSet<String> keysToIntersect = new HashSet<String>();
+				for(String s : positions){
+					keysToIntersect.add(RedisHelper.buildSetMembersKey("position",s));
+				}
+				for(String s : nightsAvailable){
+					keysToIntersect.add(RedisHelper.buildSetMembersKey("nightAvailable",s));
+				}
+				//call Jeds SINTER
+				Logger.debug("searching with keys: " + keysToIntersect);
+				ArrayList<Player> players = new ArrayList<Player>();
+				for (String playerId : jedis.sinter(keysToIntersect.toArray(new String[0]))) {
+					players.add(allPlayersMap.get(playerId));	
+				}		
+				return players;
 			}
-			for(String s : nightsAvailable){
-				keysToIntersect.add(RedisHelper.buildSetMembersKey("nightAvailable",s));
+			finally {
+				play.Play.application().plugin(RedisPlugin.class).jedisPool().returnResource(jedis);
 			}
-			//call Jeds SINTER
-			Logger.debug("searching with keys: " + keysToIntersect);
-			ArrayList<Player> players = new ArrayList<Player>();
-			for (String playerId : jedis.sinter(keysToIntersect.toArray(new String[0]))) {
-				players.add(allPlayersMap.get(playerId));	
-			}		
-			return players;
 		}
 	}
 
 	//TODO where best to call this?  during individual save? or only on mass save?
 	public static boolean indexPlayers(List<Player> players) {
 		Jedis jedis = play.Play.application().plugin(RedisPlugin.class).jedisPool().getResource();
-		Set<String> volatileKeys = jedis.smembers("volatileKeys");
-		if (volatileKeys.size() > 0){
-			jedis.del(volatileKeys.toArray(new String[0]));
-		}
-		for (Player player : players) {
-			String playerId = player.getId();
-			//TODO use a herlp to build these keys
-			jedis.set("player:" + playerId + ":name", player.getName());
-			for (String position : 	player.getPositionsAsSet()) {
-				String positionKey = "position:" + position + ":members";
-				jedis.sadd(positionKey, playerId);
-				jedis.sadd("volatileKeys", positionKey);			
+		try {
+			Set<String> volatileKeys = jedis.smembers("volatileKeys");
+			if (volatileKeys.size() > 0){
+				jedis.del(volatileKeys.toArray(new String[0]));
 			}
-			for (String nightAvailable : 	player.getNightsAvailableAsSet()) {
-				String nightAvailableKey = "nightAvailable:" + nightAvailable + ":members";
-				jedis.sadd(nightAvailableKey, playerId);
-				jedis.sadd("volatileKeys", nightAvailableKey);			
+			for (Player player : players) {
+				String playerId = player.getId();
+				//TODO use a herlp to build these keys
+				jedis.set("player:" + playerId + ":name", player.getName());
+				for (String position : 	player.getPositionsAsSet()) {
+					String positionKey = "position:" + position + ":members";
+					jedis.sadd(positionKey, playerId);
+					jedis.sadd("volatileKeys", positionKey);			
+				}
+				for (String nightAvailable : 	player.getNightsAvailableAsSet()) {
+					String nightAvailableKey = "nightAvailable:" + nightAvailable + ":members";
+					jedis.sadd(nightAvailableKey, playerId);
+					jedis.sadd("volatileKeys", nightAvailableKey);			
+				}
 			}
+			return true;
 		}
-		return true;
+		finally {
+			play.Play.application().plugin(RedisPlugin.class).jedisPool().returnResource(jedis);
+		}
 	}
 
 	public static String[] getPitchersOnWednesday() {

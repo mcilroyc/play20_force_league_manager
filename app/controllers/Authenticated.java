@@ -15,7 +15,17 @@ public class Authenticated extends Simple {
 				ctx.args.put("api",api);
 				return delegate.call(ctx);
 			} else {
-				return redirect(routes.AuthController.loginToSFDC());
+				String[] authToken = ctx.request().queryString().get("authToken");
+				if (authToken != null && authToken.length > 0) {
+					api = AuthHelper.getPrivateForceApiFromToken(authToken[0]);	
+					ctx.args.put("api",api);
+				}
+				if (api != null) {
+					return delegate.call(ctx);
+				}
+				else {
+					return redirect(routes.AuthController.loginToSFDC());
+				}
 			}
 		}
 }

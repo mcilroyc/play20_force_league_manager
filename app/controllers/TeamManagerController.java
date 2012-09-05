@@ -12,7 +12,6 @@ import java.util.List;
 
 import static play.libs.Json.toJson;
 import com.typesafe.plugin.RedisPlugin;
-import redis.clients.jedis.*;
 
 public class TeamManagerController extends Controller {
 
