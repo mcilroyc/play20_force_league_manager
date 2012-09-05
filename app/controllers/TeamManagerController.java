@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.List;
 
 import static play.libs.Json.toJson;
-import com.typesafe.plugin.RedisPlugin;
 
 public class TeamManagerController extends Controller {
 
