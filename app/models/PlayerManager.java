@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import com.typesafe.plugin.RedisPlugin;
 import redis.clients.jedis.*;
 import com.force.api.*;
+import play.*;
 
 public class PlayerManager {
 
@@ -42,6 +43,7 @@ public class PlayerManager {
 				keysToIntersect.add(RedisHelper.buildSetMembersKey("nightAvailable",s));
 			}
 			//call Jeds SINTER
+			Logger.debug("searching with keys: " + keysToIntersect);
 			ArrayList<Player> players = new ArrayList<Player>();
 			for (String playerId : jedis.sinter(keysToIntersect.toArray(new String[0]))) {
 				players.add(allPlayersMap.get(playerId));	

@@ -29,6 +29,7 @@ public class AuthController extends Controller {
 		ApiSession session = Auth.completeOAuthWebServerFlow(new AuthorizationResponse()
 				.apiConfig(config)
 				.code(token));
+		Logger.debug("auth token: " + session.getAccessToken());
 		ForceApi api = new ForceApi(config,session);
 		String userId = api.getIdentity().getUserId();
 		play.cache.Cache.set(AuthHelper.sessionKey(userId), session);		

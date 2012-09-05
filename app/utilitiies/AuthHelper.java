@@ -11,9 +11,17 @@ public class AuthHelper {
 	public static final String SFDC_USER_ID_KEY = "SFDCUserId";
 
 	public static ForceApi getPrivateForceApiFromSession(String sfdcUserId) {
-		ApiSession session = (ApiSession)play.cache.Cache.get(sessionKey(sfdcUserId));
-		if (session == null) return null;
-		return new ForceApi(session);
+		if (sfdcUserId == null) return null;
+		ApiSession session;
+		try {
+			session = (ApiSession)play.cache.Cache.get(sessionKey(sfdcUserId));
+			if (session == null) return null;
+			return new ForceApi(session);
+		}
+		catch (Exception e) {
+			return null;
+			//TODO Bad
+		}
 	}
 
 	public static CustomForceApi getPublicCustomApi() { 
