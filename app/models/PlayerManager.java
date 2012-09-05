@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
-import com.typesafe.plugin.RedisPlugin;
+//import com.typesafe.plugin.RedisPlugin;
 import redis.clients.jedis.*;
 import com.force.api.*;
 import play.*;
@@ -34,7 +34,8 @@ public class PlayerManager {
 			return new ArrayList(allPlayersMap.values());
 		}
 		else {
-			Jedis jedis = play.Play.application().plugin(RedisPlugin.class).jedisPool().getResource();
+			JedisPool pool = RedisHelper.getPool();
+			Jedis jedis = pool.getResource();
 			try {
 				HashSet<String> keysToIntersect = new HashSet<String>();
 				for(String s : positions){
@@ -52,14 +53,15 @@ public class PlayerManager {
 				return players;
 			}
 			finally {
-				play.Play.application().plugin(RedisPlugin.class).jedisPool().returnResource(jedis);
+				pool.returnResource(jedis);
 			}
 		}
 	}
 
 	//TODO where best to call this?  during individual save? or only on mass save?
 	public static boolean indexPlayers(List<Player> players) {
-		Jedis jedis = play.Play.application().plugin(RedisPlugin.class).jedisPool().getResource();
+		JedisPool pool = RedisHelper.getPool();
+		Jedis jedis = pool.getResource();
 		try {
 			Set<String> volatileKeys = jedis.smembers("volatileKeys");
 			if (volatileKeys.size() > 0){
@@ -83,12 +85,13 @@ public class PlayerManager {
 			return true;
 		}
 		finally {
-			play.Play.application().plugin(RedisPlugin.class).jedisPool().returnResource(jedis);
+			pool.returnResource(jedis);
 		}
 	}
 
 	public static String[] getPitchersOnWednesday() {
-		Jedis jedis = play.Play.application().plugin(RedisPlugin.class).jedisPool().getResource();
+		JedisPool pool = RedisHelper.getPool();
+		Jedis jedis = pool.getResource();
 		Set<String> players = jedis.sinter("position:Pitcher:members", "nightAvailable:Wednesday:members");
 		HashSet<String> playerNames = new HashSet<String>();
 		for (String playerId : players) {

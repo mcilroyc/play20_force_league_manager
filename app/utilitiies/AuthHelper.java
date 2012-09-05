@@ -19,7 +19,7 @@ public class AuthHelper {
 				return null;
 			}
 			else {
-				Logger.debug("using session with auth token: " + session.getAccessToken());
+				Logger.info("using session with auth token: " + session.getAccessToken());
 				return new ForceApi(session);
 			}
 		}
