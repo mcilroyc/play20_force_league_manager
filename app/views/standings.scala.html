@@ -9,14 +9,8 @@
 			contentType: "text/json",
 			success: function(data){
 					$(data).each(function(i,d){
-                    <li data-theme="b">
-                        Adiabats
-                        <span class="ui-li-count">
-                            1-0
-                        </span>
-                    </li>
 						$("#standingsList").append($('<li data-theme="b">' + d.teamName + 
-							'<span class="ui-li-count">' + d.gamesWon + "-" + d.gamesLost + "</span></li>"));
+							'<span class="ui-li-count">' + d.gamesWon + '-' + d.gamesLost + '</span></li>'));
 					})
 				}
 		})
