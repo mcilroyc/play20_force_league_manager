@@ -1,9 +1,7 @@
 body {
-	background-color:#efe;
 }
 
+h2 {font-family:helvetica;}
 #standingsList{}
 
-.contentWrapper {
-	margin:20px;
-}
+.seasonRecord {font-weight:bold;padding-left:10px;float:right;}

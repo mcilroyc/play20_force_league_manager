@@ -9,19 +9,22 @@
 			contentType: "text/json",
 			success: function(data){
 					$(data).each(function(i,d){
-						$("#standingsList").append($('<li data-theme="b">' + d.teamName + 
-							'<span class="ui-li-count">' + d.gamesWon + '-' + d.gamesLost + '</span></li>'));
+						$("#standingsList").append($('<li data-theme="b"><a href="#">' + d.teamName + 
+							' <span class="seasonRecord">' + d.gamesWon + '-' + d.gamesLost + '</span></a></li>'));
 					})
 				}
 		})
 	</script> 
         <!-- Home -->
-            <div class="contentWrapper">
-                <h2>
-                    Current Standings
-                </h2>
-                <ol id="standingsList" >
-                </ol>
-		<a href="/manager/home">Manager Home </a>
-            </div>
+            <div class="container">
+		    <div class="row">
+			    <div class="span4 offset1">
+				<h2>
+				    current standings
+				</h2>
+				<ol id="standingsList" class="nav nav-tabs nav-stacked">
+				</ol>
+			    </div>
+		    </div>
+	    </div>
 }
