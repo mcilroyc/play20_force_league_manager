@@ -9,10 +9,37 @@
 			contentType: "text/json",
 			success: function(data){
 					$(data).each(function(i,d){
-						$("#standingsList").append($("<li>" + d.teamName + " (" + d.gamesWon + "-" + d.gamesLost + ")</li>"));
+                    <li data-theme="b">
+                        Adiabats
+                        <span class="ui-li-count">
+                            1-0
+                        </span>
+                    </li>
+						$("#standingsList").append($('<li data-theme="b">' + d.teamName + 
+							'<span class="ui-li-count">' + d.gamesWon + "-" + d.gamesLost + "</span></li>"));
 					})
 				}
 		})
 	</script> 
-	<ol id="standingsList"></ol>
+        <!-- Home -->
+        <div data-role="page" id="page1">
+            <div data-theme="c" data-role="header">
+                <h2>
+                    Current Standings
+                </h2>
+                <ul id="standingsList" data-role="listview" data-divider-theme="b" data-inset="true">
+                </ul>
+                <div data-role="navbar" data-iconpos="top">
+                    <ul>
+                        <li>
+                            <a href="/manager/home" data-theme="" data-icon="home">
+                                Manager Home
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div data-role="content" style="padding: 15px">
+            </div>
+        </div>
 }
