@@ -2,7 +2,6 @@ package controllers;
 
 import play.*;
 import play.mvc.*;
-//import views.html.*;
 import com.force.api.*;
 import play.Logger;
 import play.cache.Cache;
@@ -20,6 +19,7 @@ public class AuthController extends Controller {
 		return redirect(url);
 	}
 
+	//handle the call back to this app, with the auth code
 	public static Result handleOAuth(String token) {
 		Logger.debug("using code: " + token);
 		ApiConfig config = new ApiConfig()

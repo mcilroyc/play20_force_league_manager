@@ -24,10 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-/*
-import org.apache.commons.io.IOUtils;
-import java.io.StringWriter;
-*/
 
 /**
  * A class to call custom Apex Rest services.
@@ -68,6 +64,9 @@ public class CustomForceApi {
 
 	}
 	
+	/*
+	 * This is the meat of the custom API
+	*/
 	public JsonNode getAsJsonNode (String servicePath) {
 		HttpRequest httpRequest = new HttpRequest()
 				.url(uriBase() + servicePath)
@@ -83,17 +82,6 @@ public class CustomForceApi {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-/*
-		StringWriter writer = new StringWriter();
-		try{
-			IOUtils.copy(response.getStream(), writer, "UTF-8");
-		}
-		catch (java.io.IOException ioe){
-			Logger.error("could not parse response", ioe);
-			return null;
-		}
-		return writer.toString();
-*/
 	}
 
 	private final String uriBase() {

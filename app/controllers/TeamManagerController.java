@@ -49,11 +49,6 @@ public class TeamManagerController extends Controller {
 			}
 		}
 
-	//TODO get rid of this after the regular seearch is properly implemented
-	@With(Authenticated.class)
-		public static Result managerTest() {
-			return ok(toJson(PlayerManager.getPitchersOnWednesday()));
-		}
 
 
 
