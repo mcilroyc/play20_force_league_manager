@@ -1,11 +1,16 @@
-logs
 project/project
 project/target
 target
 tmp
-.history
 dist
-.settings
 redis-connect
 Procfile
-.env
+db
+eclipse
+log
+logs
+precompiled
+# Ignore all dotfiles...
+.*
+# except for .gitignore
+!.gitignore
