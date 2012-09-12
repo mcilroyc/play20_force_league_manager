@@ -1,8 +1,43 @@
 @(searchForm: Form[Player])
 @main("Search-a-Sub") {
-	@helper.form(action = routes.TeamManagerController.getSubs()) {
-		@helper.inputText(searchForm("positions"))
-		@helper.inputText(searchForm("nightsAvailable"))
-		<input type="submit" value="Create">
-	}
+    <div class="container">
+	    <div class="row">
+		    <div class="span4 offset1">
+			<h2>
+				sub finder
+			</h2>
+			@helper.form(action = routes.TeamManagerController.getSubs()) {
+				@helper.select(
+					field = searchForm("positions"), 
+					options = helper.options(
+						scala.collection.immutable.List(
+							"Pitcher", 
+							"Catcher", 
+							"Infield Left", 
+							"Infield Right", 
+							"Outfield Left", 
+							"Outfield Right", 
+							"Batter (Good)"
+						)
+					)
+				)
+				@helper.select(
+					field = searchForm("nightsAvailable"), 
+					options = helper.options(
+						scala.collection.immutable.List(
+							"Sunday", 
+							"Monday", 
+							"Tuesday", 
+							"Wednesday", 
+							"Thursday", 
+							"Friday", 
+							"Saturday"
+						)
+					)
+				)
+				<input type="submit" value="search">
+			}
+		    </div>
+	    </div>
+    </div>
 }
