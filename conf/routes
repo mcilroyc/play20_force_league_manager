@@ -9,7 +9,6 @@ GET     /oauth                      controllers.AuthController.handleOAuth(code:
 
 # need a "manager search" route TODO research form submission
 GET     /manager/home               controllers.TeamManagerController.index()
-GET     /manager/test               controllers.TeamManagerController.managerTest()
 GET     /manager/subs               controllers.TeamManagerController.getSubs()
 
 GET     /standings                  controllers.Standings.index()
