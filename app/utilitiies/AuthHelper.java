@@ -10,6 +10,7 @@ public class AuthHelper {
 	//session key
 	public static final String SFDC_USER_ID_KEY = "SFDCUserId";
 
+	//Given a USER ID, try to get the API session from th PLAY session
 	public static ForceApi getPrivateForceApiFromSession(String sfdcUserId) {
 		if (sfdcUserId == null) return null;
 		ApiSession session;
@@ -30,6 +31,7 @@ public class AuthHelper {
 		}
 	}
 
+	//Try to instantiate a Force API based on a auth toekn
 	public static ForceApi getPrivateForceApiFromToken(String token) {
 		ApiConfig config = new ApiConfig()
 			.setRedirectURI("https://" + System.getenv("DOMAIN") + "/oauth")
@@ -47,6 +49,7 @@ public class AuthHelper {
 		}
 	}
 
+	//Create a CustomForceAPI object using the public user/passs
 	public static CustomForceApi getPublicCustomApi() { 
 		ApiConfig config = new ApiConfig()
 			.setUsername(System.getenv("PUBLIC_SFDC_USERNAME"))
@@ -57,6 +60,7 @@ public class AuthHelper {
 		return new CustomForceApi(config,session);
 	}
 
+	//Helper method to build a session key from the userID
 	public static String sessionKey(String userId){
 		return "user:"+userId+":session";
 	}

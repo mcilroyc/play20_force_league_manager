@@ -21,18 +21,23 @@ public class AuthController extends Controller {
 
 	//handle the call back to this app, with the auth code
 	public static Result handleOAuth(String token) {
-		Logger.debug("using code: " + token);
+		//Build the conifg object
 		ApiConfig config = new ApiConfig()
 			.setClientId(System.getenv("CLIENT_ID"))
 			.setRedirectURI("https://" + System.getenv("DOMAIN") + "/oauth")
 			.setClientSecret(System.getenv("CLIENT_SECRET"));
+		//Use the Token to complete the OAuth process
 		ApiSession session = Auth.completeOAuthWebServerFlow(new AuthorizationResponse()
 				.apiConfig(config)
 				.code(token));
 		Logger.debug("auth token: " + session.getAccessToken());
+		//create a new Force API instance
 		ForceApi api = new ForceApi(config,session);
+		//get the SFDC user ID from the API
 		String userId = api.getIdentity().getUserId();
+		//Put the Force Session in the cache
 		play.cache.Cache.set(AuthHelper.sessionKey(userId), session);		
+		//Put the user ID in the Play Session
 		session(AuthHelper.SFDC_USER_ID_KEY, userId);
 		return redirect("/manager/home");
 	}
