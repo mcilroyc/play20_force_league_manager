@@ -3,12 +3,13 @@ package controllers;
 import play.*;
 import play.mvc.*;
 import play.data.*;
-import  play.libs.Json.toJson;
 import models.*;
 import views.html.*;
 import com.force.api.*;
 import java.util.Map;
 import java.util.List;
+
+import static play.libs.Json.toJson;
 
 public class TeamManagerController extends Controller {
 
