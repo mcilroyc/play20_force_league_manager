@@ -10,7 +10,7 @@ import views._
 object Standings extends Controller {
 	//Standing home page (returns template/html)
 	def index = Action {
-		Ok(html.standings("Standings Home Page"))
+		Ok(html.standings("SCALA Standings Home Page"))
 	}
 
 	//getAll (returns JSON)
