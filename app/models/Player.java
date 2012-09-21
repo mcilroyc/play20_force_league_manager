@@ -10,13 +10,13 @@ import java.util.Set;
 public class Player {
 
 	@JsonProperty(value="Id")
-		String id;
+	String id;
 	@JsonProperty(value="Name")
-		String name;
+	String name;
 	@JsonProperty(value="Nights_Available__c")
-		String nightsAvailable;
+	String nightsAvailable;
 	@JsonProperty(value="Positions__c")
-		String positions;
+	String positions;
 
 	public String getId() { return id; }
 	public void setId(String id) { this.id = id; }

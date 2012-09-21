@@ -19,25 +19,30 @@ public class PlayerManager {
 
 	private ForceApi api;
 
+	//constructor
 	public PlayerManager(ForceApi api) {
 		this.api = api;	
 	}
 
+	//convenience method
 	public List<Player> getAllPlayers() {
 		return findPlayers(null,null);	
 	}
 
 	public List<Player> findPlayers(String[] positions, String[] nightsAvailable) {
 		Map<String,Player> allPlayersMap = getAllPlayersMap();
+		//If no params supplied, do an open query
 		if (( positions == null || positions.length == 0) && ( nightsAvailable == null || nightsAvailable.length == 0)){
 			return new ArrayList(allPlayersMap.values());
 		}
 		else {
+			//Get a Redis pool
 			JedisPool pool = RedisHelper.getPool();
 			Jedis jedis = pool.getResource();
 			try {
+				//Build a set of keys of Redis sets to intersect
 				HashSet<String> keysToIntersect = new HashSet<String>();
-				if (positions!=null){
+				if (positions != null){
 					for(String s : positions){
 						keysToIntersect.add(RedisHelper.buildSetMembersKey("position",s));
 					}
@@ -61,7 +66,7 @@ public class PlayerManager {
 		}
 	}
 
-	//TODO where best to call this?  during individual save? or only on mass save?
+	//Index players in Redis for searching
 	public static boolean indexPlayers(List<Player> players) {
 		JedisPool pool = RedisHelper.getPool();
 		Jedis jedis = pool.getResource();
@@ -72,7 +77,6 @@ public class PlayerManager {
 			}
 			for (Player player : players) {
 				String playerId = player.getId();
-				//TODO use a herlp to build these keys
 				jedis.set("player:" + playerId + ":name", player.getName());
 				for (String position : 	player.getPositionsAsSet()) {
 					String positionKey = "position:" + position + ":members";
@@ -92,33 +96,9 @@ public class PlayerManager {
 		}
 	}
 
-	public static String[] getPitchersOnWednesday() {
-		JedisPool pool = RedisHelper.getPool();
-		Jedis jedis = pool.getResource();
-		Set<String> players = jedis.sinter("position:Pitcher:members", "nightAvailable:Wednesday:members");
-		HashSet<String> playerNames = new HashSet<String>();
-		for (String playerId : players) {
-			playerNames.add(jedis.get("player:"+playerId+":name"));	
-		}		
-		return playerNames.toArray(new String[0]);
-	}
-
-	private List<Player> getAllPlayersFromSFDC() {
-		//get the authentication from the session
-		//ForceApi api = AuthHelper.getPrivateForceApi();
-		QueryResult<Player> results = 	
-			api.query(PLAYER_QUERY_ROOT + " where Willing_to_Substitute__c = true", Player.class);
-		if (results != null) {
-			return results.getRecords();
-		}
-		else {
-			return null;
-		}
-	}
-
-	//get from cache, for build it up from SFDC
+	//get from cache, or build it up from SFDC
 	private Map<String,Player> getAllPlayersMap() {
-		//TODO maybe use getOrElse cache function
+		//FUTURE maybe use getOrElse cache function
 		Map<String,Player> allPlayersMap = (Map<String,Player>)play.cache.Cache.get(ALL_PLAYERS_CACHE_KEY);;
 		if (allPlayersMap != null) {
 			return allPlayersMap;
@@ -133,6 +113,18 @@ public class PlayerManager {
 			//also index the players in redis for searching
 			indexPlayers(players);
 			return allPlayersMap;
+		}
+	}
+
+	//Get All Players from SFDC via the API
+	private List<Player> getAllPlayersFromSFDC() {
+		QueryResult<Player> results = 	
+			api.query(PLAYER_QUERY_ROOT + " where Willing_to_Substitute__c = true", Player.class);
+		if (results != null) {
+			return results.getRecords();
+		}
+		else {
+			return null;
 		}
 	}
 }

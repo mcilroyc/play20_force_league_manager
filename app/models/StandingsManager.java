@@ -1,10 +1,5 @@
 package models;
 
-//import java.util.HashSet;
-//import java.util.Set;
-//import java.util.List;
-//import redis.clients.jedis.*;
-//import com.force.api.*;
 import play.*;
 import utilities.*;
 import org.codehaus.jackson.JsonNode;
@@ -13,9 +8,7 @@ public class StandingsManager {
 
 	static final String STANDINGS_KEY = "standings";
 
-	/* 
-	 * Fetch from cache, or from SFDC 
-	 */
+	//Fetch from cache, or from SFDC 
 	public static JsonNode getAllStandingsJSON() {
 		JsonNode standingsJson = null;
 		standingsJson = (JsonNode)play.cache.Cache.get(STANDINGS_KEY);
@@ -37,9 +30,7 @@ public class StandingsManager {
 		}
 	}
 
-	/* 
-	 * get json directly from SDFC via a custom rest api call
-	 */
+	//get json directly from SDFC via a custom rest api call
 	private static JsonNode fetchStandingsFromSFDC(){
 		CustomForceApi api = AuthHelper.getPublicCustomApi();
 		return api.getAsJsonNode("standings/current");
